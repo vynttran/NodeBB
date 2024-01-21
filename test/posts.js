@@ -1265,3 +1265,13 @@ describe('socketPosts.getVoters', () => {
         }
     });
 });
+
+describe('socketPosts.getUpvoters', () => {
+    it('should throw an error if pids is not an array', async () => {
+        try {
+            await socketPosts.getUpvoters({}, 123);
+        } catch (err) {
+            assert.strictEqual(err.message, '[[error:invalid-data]]');
+        }
+    });
+});
