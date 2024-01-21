@@ -1243,3 +1243,15 @@ describe('Posts\'', async () => {
         });
     });
 });
+
+// Vy's added tests starts here and go until end of this file.
+
+describe('socketPosts.getVoters', () => {
+    it('should throw an error if data is invalid', async () => {
+        try {
+            await socketPosts.getVoters({}, null);
+        } catch (err) {
+            assert.strictEqual(err.message, '[[error:invalid-data]]');
+        }
+    });
+});
