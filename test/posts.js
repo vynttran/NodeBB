@@ -1274,4 +1274,9 @@ describe('socketPosts.getUpvoters', () => {
             assert.strictEqual(err.message, '[[error:invalid-data]]');
         }
     });
+
+    it('should return an empty array if pids is empty', async () => {
+        const result = await socketPosts.getUpvoters({}, []);
+        assert.deepStrictEqual(result, []);
+    });
 });
