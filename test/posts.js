@@ -1279,4 +1279,22 @@ describe('socketPosts.getUpvoters', () => {
         const result = await socketPosts.getUpvoters({}, []);
         assert.deepStrictEqual(result, []);
     });
+
+    it('should handle more than 6 upvoters correctly', async () => {
+        const mockGetUpvotedUidsByPids = pids => pids.map(pid => Array.from({ length: pid }, (_, i) => `user${i + 1}`));
+        const mockGetUsernamesByUids = uids => Promise.resolve(uids.slice(0, 5));
+
+        const originalGetUpvotedUidsByPids = posts.getUpvotedUidsByPids;
+        const originalGetUsernamesByUids = user.getUsernamesByUids;
+        posts.getUpvotedUidsByPids = mockGetUpvotedUidsByPids;
+        user.getUsernamesByUids = mockGetUsernamesByUids;
+
+        const result = await socketPosts.getUpvoters({}, [8]);
+        assert.strictEqual(result.length, 1);
+        assert.strictEqual(result[0].otherCount, 3);
+        assert.strictEqual(result[0].usernames.length, 5);
+
+        posts.getUpvotedUidsByPids = originalGetUpvotedUidsByPids;
+        user.getUsernamesByUids = originalGetUsernamesByUids;
+    });
 });
