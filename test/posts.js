@@ -1254,4 +1254,14 @@ describe('socketPosts.getVoters', () => {
             assert.strictEqual(err.message, '[[error:invalid-data]]');
         }
     });
+
+    it('should throw an error if user does not have permission to see votes', async () => {
+        meta.config.votesArePublic = false;
+        privileges.categories.isAdminOrMod(false);
+        try {
+            await socketPosts.getVoters({ uid: 1 }, { pid: 1, cid: 1 });
+        } catch (err) {
+            assert.strictEqual(err.message, '[[error:no-privileges]]');
+        }
+    });
 });
